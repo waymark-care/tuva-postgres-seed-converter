@@ -11,7 +11,18 @@ Here's a quickstart command that will download the v0.10.0 Tuva Health seed data
 
 > **NOTE**: you can pass any valid git tag/branch/sha for the version in case you need to test this against a non-released version of the `dbt_project.yml` file.
 
-## Setup and Next Steps
+## Setup
+
+This project uses [direnv](https://direnv.net/), [pyenv](https://github.com/pyenv/pyenv), and [poetry](https://python-poetry.org/). The first two are optional, but poetry is not and is used to setup your python virtual environment as well as installing dependencies. All commands in this readme assume you're using a ~3.12 version of python and have activated your virtual env. The following commands should do it:
+
+    poetry install
+    poetry shell
+
+From there, you can run some of the commands (particularly around formatting, linting, etc) using [poe the poet](https://poethepoet.natn.io/index.html) commands. You can run all of the "ci" checks via
+
+    poe ci
+
+## AWS Setup and Next Steps (dbt + tuva)
 
 In order to use this script, you'll need an AWS S3 bucket setup where you can write data to as well as have your local environment setup so boto3 can authenticate and write to that S3 bucket. Refer to the AWS and boto3 documentation for more details here.
 
