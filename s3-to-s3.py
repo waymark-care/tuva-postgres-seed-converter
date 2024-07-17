@@ -14,6 +14,11 @@ from typing_extensions import Annotated
 
 app = typer.Typer()
 
+# Tuva Health hosted S3 bucket with the seed data. Credentials should match what is in the tuva repo for loading seeds.
+TUVA_SEEDS_S3_REGION_NAME = "us-east-1"
+TUVA_SEEDS_S3_ACCESS_KEY_ID = "AKIA2EPVNTV4FLAEBFGE"
+TUVA_SEEDS_S3_SECRET_ACCESS_KEY = "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"
+
 
 @dataclass
 class SeedConfig:
@@ -84,9 +89,9 @@ def _download_files_from_s3(
 ) -> list[SeedData]:
     s3 = boto3.client(
         service_name="s3",
-        region_name="us-east-1",
-        aws_access_key_id="AKIA2EPVNTV4FLAEBFGE",
-        aws_secret_access_key="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",
+        region_name=TUVA_SEEDS_S3_REGION_NAME,
+        aws_access_key_id=TUVA_SEEDS_S3_ACCESS_KEY_ID,
+        aws_secret_access_key=TUVA_SEEDS_S3_SECRET_ACCESS_KEY,
     )
 
     seed_data = []
