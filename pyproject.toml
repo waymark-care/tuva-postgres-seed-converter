@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Converts the tuva seed files into a postgres friendly format"
 authors = ["Data Engineering <data-engineering@waymarkcare.com>"]
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.12"
@@ -24,6 +25,7 @@ pytest-mock = "^3.14.0"
 bandit = "^1.7.9"
 types-requests = "^2.32.0.20240712"
 types-pyyaml = "^6.0.12.20240311"
+pytest-cov = "^5.0.0"
 
 [build-system]
 requires = ["poetry-core"]
@@ -31,7 +33,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
 minversion = "8.0"
-addopts = "-s -vv"
+addopts = "-s -vv --cov=. --cov=tests --cov-fail-under=100 --cov-report html"
 testpaths = ["tests"]
 
 [tool.poe.tasks]
