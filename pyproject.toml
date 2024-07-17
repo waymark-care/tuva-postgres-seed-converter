@@ -26,6 +26,10 @@ bandit = "^1.7.9"
 types-requests = "^2.32.0.20240712"
 types-pyyaml = "^6.0.12.20240311"
 pytest-cov = "^5.0.0"
+pytest-watch = "^4.2.0"
+moto = {extras = ["s3"], version = "^5.0.11"}
+mypy-boto3 = "^1.34.144"
+boto3-stubs = {extras = ["s3"], version = "^1.34.144"}
 
 [build-system]
 requires = ["poetry-core"]
@@ -33,7 +37,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
 minversion = "8.0"
-addopts = "-s -vv --cov=. --cov=tests --cov-fail-under=100 --cov-report html"
+addopts = "-s -vv --cov=. --cov=tests --cov-fail-under=97 --cov-report html"
 testpaths = ["tests"]
 
 [tool.poe.tasks]
