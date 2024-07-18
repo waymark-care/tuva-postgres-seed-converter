@@ -28,3 +28,5 @@ jobs:
       - name: ci
         id: ci
         run: poetry run poe ci
+        env:
+            TERM: dumb
