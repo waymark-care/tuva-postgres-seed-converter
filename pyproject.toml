@@ -1,0 +1,45 @@
+[tool.poetry]
+name = "tuva-postgres-seed-converter"
+version = "0.1.0"
+description = "Converts the tuva seed files into a postgres friendly format"
+authors = ["Data Engineering <data-engineering@waymarkcare.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+boto3 = "^1.34.136"
+psycopg2 = "^2.9.9"
+typer = "^0.12.3"
+pyyaml = "^6.0.1"
+requests = "^2.32.3"
+
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.5.1"
+poethepoet = "^0.27.0"
+pytest = "^8.2.2"
+mypy = "^1.10.1"
+pytest-md = "^0.2.0"
+pytest-mock = "^3.14.0"
+bandit = "^1.7.9"
+types-requests = "^2.32.0.20240712"
+types-pyyaml = "^6.0.12.20240311"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "-s -vv"
+testpaths = ["tests"]
+
+[tool.poe.tasks]
+test = "pytest"
+lint-ruff = "ruff check ."
+lint = ["lint-ruff"]
+types = "mypy ."
+format = "ruff format ."
+check-format = "ruff format --check ."
+security = "bandit -c pyproject.toml -r --recursive --format txt --output bandit.out scripts"
+ci = ["check-format", "lint", "types", "security", "test"]
