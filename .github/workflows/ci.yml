@@ -21,4 +21,10 @@ jobs:
         with:
             cache: 'poetry'
 
-  
+      - name: Install dependencies
+        run: |
+          poetry install
+
+      - name: ci
+        id: ci
+        run: poetry run poe ci
