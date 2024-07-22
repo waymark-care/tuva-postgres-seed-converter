@@ -1,0 +1,32 @@
+name: Continuous Integration for tuva-pg-converter
+run-name: ${{ github.actor }} has pushed content, running ci checks
+
+on:
+  push:
+    branches:
+      - "**"
+
+jobs:
+  continuous-integration:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install poetry
+        run: pipx install poetry==1.8.1
+
+      - name: Set up python
+        uses: actions/setup-python@v4
+        with:
+            cache: 'poetry'
+
+      - name: Install dependencies
+        run: |
+          poetry install
+
+      - name: ci
+        id: ci
+        run: poetry run poe ci
+        env:
+            TERM: dumb

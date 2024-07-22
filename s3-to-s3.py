@@ -144,7 +144,7 @@ def _upload_data_to_s3(
 
 
 @app.command()
-def main(
+def s3_to_s3(
     target_s3_bucket: Annotated[
         str,
         typer.Argument(envvar="TARGET_S3_BUCKET", help="S3 bucket to copy data into"),
@@ -172,5 +172,5 @@ def main(
     _upload_data_to_s3(seed_data, target_s3_bucket, prefix=target_s3_bucket_prefix)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     app()
