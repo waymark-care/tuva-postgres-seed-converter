@@ -62,7 +62,10 @@ def _parse_dbt_project_yml(dbt_project: dict[str, Any]) -> list[SeedConfig]:
     def process_level(lineage: list[str], node: dict[str, Any]) -> None:
         if "+post-hook" in node:
             assert len(lineage) > 1
-            match = re.search(r"custom_bucket_name','([^']*)'\)\s~\s'([^']*)','([^']*)", node["+post-hook"])
+            match = re.search(
+                r"custom_bucket_name','([^']*)'\)\s~\s'([^']*)','([^']*)",
+                node["+post-hook"],
+            )
             if match:
                 s3_path = match.group(1) + match.group(2)
                 filename_pattern = match.group(3)
