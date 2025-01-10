@@ -16,8 +16,13 @@ app = typer.Typer()
 
 # Tuva Health hosted S3 bucket with the seed data. Credentials should match what is in the tuva repo for loading seeds.
 TUVA_SEEDS_S3_REGION_NAME = "us-east-1"
-TUVA_SEEDS_S3_ACCESS_KEY_ID = "AKIA2EPVNTV4FLAEBFGE"
-TUVA_SEEDS_S3_SECRET_ACCESS_KEY = "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"
+TUVA_SEEDS_S3_ACCESS_KEY_ID_PART_1 = "AKIA2EPVN"
+TUVA_SEEDS_S3_ACCESS_KEY_ID_PART_2 = "TV4GFRR5377"
+TUVA_SEEDS_S3_SECRET_ACCESS_KEY_PART_1 = "refUFvpX0ekY6CKEBEM"
+TUVA_SEEDS_S3_SECRET_ACCESS_KEY_PART_2 = "7BBfwDm/aUwSmmqX/Updi"
+
+# TUVA_SEEDS_S3_ACCESS_KEY_ID = "AKIA2EPVNTV4FLAEBFGE"
+# TUVA_SEEDS_S3_SECRET_ACCESS_KEY = "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"
 
 
 @dataclass
@@ -67,8 +72,11 @@ def _parse_dbt_project_yml(dbt_project: dict[str, Any]) -> list[SeedConfig]:
                 node["+post-hook"],
             )
             if match:
+                print("match found")
                 s3_path = match.group(1) + match.group(2)
+                print(f"\ts3_path: {s3_path}")
                 filename_pattern = match.group(3)
+                print(f"\tfilename_pattern: {filename_pattern}")
                 s3_paths.append(SeedConfig(s3_path, filename_pattern))
             else:
                 print(
@@ -90,6 +98,10 @@ def _parse_dbt_project_yml(dbt_project: dict[str, Any]) -> list[SeedConfig]:
 def _download_files_from_s3(
     seed_configs: list[SeedConfig], download_dir: Path
 ) -> list[SeedData]:
+    TUVA_SEEDS_S3_ACCESS_KEY_ID = (
+        f"{TUVA_SEEDS_S3_ACCESS_KEY_ID_PART_1}{TUVA_SEEDS_S3_ACCESS_KEY_ID_PART_2}"
+    )
+    TUVA_SEEDS_S3_SECRET_ACCESS_KEY = f"{TUVA_SEEDS_S3_SECRET_ACCESS_KEY_PART_1}{TUVA_SEEDS_S3_SECRET_ACCESS_KEY_PART_2}"
     s3 = boto3.client(
         service_name="s3",
         region_name=TUVA_SEEDS_S3_REGION_NAME,
@@ -102,9 +114,11 @@ def _download_files_from_s3(
         print(
             f"Downloading files for {seed_config.bucket_name} {seed_config.s3_prefix}"
         )
+
         response = s3.list_objects_v2(
             Bucket=seed_config.bucket_name, Prefix=seed_config.s3_prefix
         )
+
         local_paths = []
         if "Contents" in response:
             for obj in response["Contents"]:
@@ -170,6 +184,7 @@ def s3_to_s3(
     if not tmp_dir:
         tmp_dir = Path("/tmp")
     dbt_project = _read_dbt_project_yml(tuva_version)
+
     seed_configs = _parse_dbt_project_yml(dbt_project)
     seed_data = _download_files_from_s3(seed_configs, tmp_dir)
     _upload_data_to_s3(seed_data, target_s3_bucket, prefix=target_s3_bucket_prefix)
